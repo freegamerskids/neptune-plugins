@@ -4,11 +4,13 @@ console.log("Hello world!")
 
 load();
 
-setActivity({
-  state: "testing",
-  smallImageKey: "play",
-  smallImageText: "neptune"
-});
+setTimeout(() => {
+  setActivity({
+    state: "testing",
+    smallImageKey: "play",
+    smallImageText: "neptune"
+  });
+}, 2_000)
 
 // This is where you would typically put cleanup code.
 export function onUnload() {

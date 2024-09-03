@@ -2,11 +2,9 @@ import { AutoClient, Presence } from "discord-auto-rpc";
 
 let client = new AutoClient({ transport: "ipc" });
 
-client.setActivity({
-  state: "testing",
-  smallImageKey: "play",
-  smallImageText: "neptune"
-})
+client.on("ready", () => {
+    console.log("Ready!");
+});
 
 export function load() {
     client.endlessLogin({

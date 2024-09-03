@@ -1,0 +1,6 @@
+{
+  "name": "Discord RPC",
+  "description": "woahhhh discord rpc!!! i love discord!!!",
+  "author": "lolwm",
+  "main": "./src/index.ts"
+}

@@ -66,7 +66,14 @@ function timeUpdateCallback([payload]){
     timestamps: {
       start: startTs,
       end: ts + (vals.duration * 1000) - (payload * 1000),
-    }
+    },
+
+    buttons: [
+      {
+        label: "Open in TIDAL",
+        url: vals.url
+      }
+    ]
   });
 }
 

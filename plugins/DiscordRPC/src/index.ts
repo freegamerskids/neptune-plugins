@@ -3,22 +3,19 @@ import { intercept } from "neptune-types/api/intercept";
 
 console.log("Hello world!")
 
-let loaded = false;
-load().then(() => {
-  loaded = true;
-});
+;(async ()=>{
+  await load();
 
-while (!loaded) {}
+  let state = window.neptune.store.getState();
 
-let state = window.neptune.store.getState();
+  setActivity({
+    state: `Playing ${state.playQueue.sourceName}`,
+    smallImageKey: "play",
+    smallImageText: "neptune"
+  });
 
-setActivity({
-  state: `Playing ${state.playQueue.sourceName}`,
-  smallImageKey: "play",
-  smallImageText: "neptune"
-});
-
-console.log(state.playQueue);
+  console.log(state.playQueue);
+})();
 
 intercept("playbackControls/SET_PLAYBACK_STATE", ([payload]) => {
   console.log(payload);

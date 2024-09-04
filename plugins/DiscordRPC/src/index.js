@@ -7,11 +7,11 @@ function getValuesForActivity() {
   let domImg = document.querySelector('img[class^="cellImage--"][class*="image--"]')
   let image = domImg ? domImg.src : null;
 
-  let domTitle = document.querySelector('.wave-text-description-demi')
+  let domTitle = document.querySelector('div[class^="trackTitleContainer--"] a span[class="wave-text-description-demi"]')
   let title = domTitle ? domTitle.innerText : null;
 
   let artists;
-  document.querySelectorAll('a[class^="item--"][aria-label]').forEach(el => {
+  document.querySelectorAll('span[class="artist-link"] a[class^="item--"][aria-label]').forEach(el => {
     artists += el.innerText + ","
   })
   artists = artists ? artists.slice(0, -1) : null;

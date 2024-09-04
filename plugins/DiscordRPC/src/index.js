@@ -11,10 +11,10 @@ function getValuesForActivity() {
   let title = domTitle ? domTitle.innerText : null;
 
   let artists;
-  document.querySelectorAll('span[class^="artist-link"] a[class^="item--"][aria-label]').forEach(el => {
-    artists += el.innerText + ","
+  document.querySelectorAll('div[class^="currentMediaItemDetails--"] div span span span[class*="artist-link"] a[class^="item--"][aria-label]').forEach(el => {
+    artists += el.innerText + " ,"
   })
-  artists = artists ? artists.slice(0, -1) : null;
+  artists = artists ? artists.slice(0, -2) : null;
 
   return {
     image,

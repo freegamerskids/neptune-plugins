@@ -2,7 +2,7 @@ import { load, unload, setActivity } from "./rpc.native";
 import { intercept } from "@neptune";
 
 function coverIdToUrl(id) {
-  return `https://resources.tidal.com/images/${id.replaceAll('-','/')}/1028x1028.jpg`;
+  return `https://resources.tidal.com/images/${id.replaceAll('-','/')}/1280x1280.jpg`;
 }
 
 function getValuesForActivity() {
@@ -53,8 +53,6 @@ function timeUpdateCallback([payload]){
 
   let vals = getValuesForActivity();
   if (!vals) return false;
-
-  console.log(vals)
 
   setActivity({
     type: 2,

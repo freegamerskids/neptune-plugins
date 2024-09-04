@@ -1,5 +1,5 @@
 import { load, unload, setActivity } from "./rpc.native";
-import { intercept, observe } from "@neptune";
+import { intercept } from "@neptune";
 
 console.log("Hello world!")
 
@@ -51,7 +51,7 @@ function getValuesForActivity() {
 intercept("playbackControls/TIME_UPDATE", ([payload]) => {
   let state = window.neptune.store.getState();
 
-  let ts = new Date.now();
+  let ts = Date.now();
   let startTs = ts;
   if (state.playbackControls.playbackState !== "NOT_PLAYING") {
     if (payload !== 0) return false;
@@ -78,7 +78,6 @@ intercept("playbackControls/TIME_UPDATE", ([payload]) => {
   });
 })
 
-// This is where you would typically put cleanup code.
 export function onUnload() {
   unload();
 

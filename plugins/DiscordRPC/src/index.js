@@ -1,25 +1,33 @@
 import { load, unload, setActivity } from "./rpc.native";
-import { intercept } from "@neptune";
+import { intercept, observe } from "@neptune";
 
 console.log("Hello world!")
 
-function getValuesForActivity() {
-  let domImg = document.querySelector('figure[class^="currentMediaImagery--"] div div div img[class^="cellImage--"][class*="image--"]')
-  let image = domImg ? domImg.src : null;
+function coverIdToUrl(id) {
+  return `https://resources.tidal.com/images/${id.replace('-','/')}/1028x1028.jpg`;
+}
 
-  let domTitle = document.querySelector('div[class^="trackTitleContainer--"] a span[class="wave-text-description-demi"]')
-  let title = domTitle ? domTitle.innerText : null;
+function getValuesForActivity() {
+  let track = window.neptune.currentMediaItem;
+
+  if (!track) return null
+  if (track.type !== "track") return null
+
+  track = track.item;
 
   let artists = "";
-  document.querySelectorAll('div[class^="currentMediaItemDetails--"] div span span span[class*="artist-link"] a[class^="item--"][aria-label]').forEach(el => {
-    artists += el.innerText + " ,"
-  })
+  for (const artist of track.artists){
+    artists += artist.name + " ,"
+  }
   artists = artists ? artists.slice(0, -2) : null;
 
   return {
-    image,
-    title,
-    artists
+    image: coverIdToUrl(track.album.cover),
+    title: track.title,
+    artists,
+    duration: track.duration,
+    url: track.url,
+    albumName: track.album.title
   }
 }
 
@@ -32,17 +40,42 @@ function getValuesForActivity() {
   let state = window.neptune.store.getState();
 
   setActivity({
-    state: `Playing ${vals.title} by ${vals.artists}`,
-    smallImageKey: "play",
-    smallImageText: "Playing",
-    largeImageKey: vals.image,
+    type: 2,
+    state: `Idling`,
+    largeImageKey: "tidal",
   });
 
   console.log(state.playQueue);
 })();
 
-intercept("playbackControls/SET_PLAYBACK_STATE", ([payload]) => {
-  console.log(payload);
+intercept("playbackControls/TIME_UPDATE", ([payload]) => {
+  let state = window.neptune.store.getState();
+
+  let ts = new Date.now();
+  let startTs = ts;
+  if (state.playbackControls.playbackState !== "NOT_PLAYING") {
+    if (payload !== 0) return false;
+  } else {
+    startTs = ts - (payload * 1000);
+  }
+
+  let vals = getValuesForActivity();
+  if (!vals) return false;
+
+  setActivity({
+    type: 2,
+    details: `Playing ${vals.title}`,
+    state: `by ${vals.artists}`,
+    smallImageKey: "tidal",
+    smallImageText: "Listening on TIDAL",
+    largeImageKey: vals.image,
+    largeImageText: vals.albumName,
+
+    timestamps: {
+      start: startTs,
+      end: ts + (vals.duration * 1000) - (payload * 1000),
+    }
+  });
 })
 
 // This is where you would typically put cleanup code.

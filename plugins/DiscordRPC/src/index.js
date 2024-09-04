@@ -3,15 +3,39 @@ import { intercept } from "@neptune";
 
 console.log("Hello world!")
 
+function getValuesForActivity() {
+  let domImg = document.querySelector('img[class^="cellImage--"][class*="image--"]')
+  let image = domImg ? domImg.src : null;
+
+  let domTitle = document.querySelector('.wave-text-description-demi')
+  let title = domTitle ? domTitle.innerText : null;
+
+  let artists;
+  document.querySelectorAll('a[class^="item--"][aria-label]').forEach(el => {
+    artists += el.innerText + ","
+  })
+  artists = artists ? artists.slice(0, -1) : null;
+
+  return {
+    image,
+    title,
+    artists
+  }
+}
+
 ;(async ()=>{
   await load();
+
+  let vals = getValuesForActivity();
+  console.log(vals);
 
   let state = window.neptune.store.getState();
 
   setActivity({
-    state: `Playing ${state.playQueue.sourceName}`,
+    state: `Playing ${vals.title} by ${vals.artists}`,
     smallImageKey: "play",
-    smallImageText: "neptune"
+    smallImageText: "Playing",
+    largeImageKey: vals.image,
   });
 
   console.log(state.playQueue);

@@ -4,13 +4,13 @@ import { intercept } from "@neptune";
 console.log("Hello world!")
 
 function getValuesForActivity() {
-  let domImg = document.querySelector('img[class^="cellImage--"][class*="image--"]')
+  let domImg = document.querySelector('figure[class^="currentMediaImagery--"] div div div img[class^="cellImage--"][class*="image--"]')
   let image = domImg ? domImg.src : null;
 
   let domTitle = document.querySelector('div[class^="trackTitleContainer--"] a span[class="wave-text-description-demi"]')
   let title = domTitle ? domTitle.innerText : null;
 
-  let artists;
+  let artists = "";
   document.querySelectorAll('div[class^="currentMediaItemDetails--"] div span span span[class*="artist-link"] a[class^="item--"][aria-label]').forEach(el => {
     artists += el.innerText + " ,"
   })

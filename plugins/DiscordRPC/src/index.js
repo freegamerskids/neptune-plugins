@@ -15,7 +15,7 @@ function getValuesForActivity() {
 
   let artists = "";
   for (const artist of track.artists){
-    artists += artist.name + " ,"
+    artists += artist.name + ", "
   }
   artists = artists ? artists.slice(0, -2) : null;
 
@@ -53,6 +53,8 @@ function timeUpdateCallback([payload]){
 
   let vals = getValuesForActivity();
   if (!vals) return false;
+
+  console.log(vals)
 
   setActivity({
     type: 2,

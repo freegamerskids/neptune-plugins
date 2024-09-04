@@ -1,6 +1,6 @@
 import { AutoClient, Presence } from "discord-auto-rpc";
 
-let client:AutoClient = new AutoClient({ transport: "ipc" });
+let client = new AutoClient({ transport: "ipc" });
 
 export async function load() {
     await client.endlessLogin({
@@ -8,7 +8,7 @@ export async function load() {
     });
 }
 
-export function setActivity(args: Presence) {
+export function setActivity(args) {
     client.setActivity(args);
 } 
 

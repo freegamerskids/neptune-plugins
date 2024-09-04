@@ -1,5 +1,5 @@
 import { load, unload, setActivity } from "./rpc.native";
-import { intercept } from "neptune-types/api/intercept";
+import { intercept } from "@neptune";
 
 console.log("Hello world!")
 

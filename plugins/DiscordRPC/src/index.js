@@ -29,47 +29,61 @@ function getValuesForActivity() {
   }
 }
 
-;(async ()=>{
-  await load();
-
-  console.log("[DiscordRPC] Loaded!");
-
+function setIdle() {
   setActivity({
     type: 2,
     state: `Idling`,
     largeImageKey: "tidal",
   });
+}
 
-  intercept("playbackControls/TIME_UPDATE", ([payload]) => {
-    let state = window.neptune.store.getState();
+function timeUpdateCallback([payload]){
+  let state = window.neptune.store.getState();
 
-    let ts = Date.now();
-    let startTs = ts;
-    if (state.playbackControls.playbackState !== "NOT_PLAYING") {
-      if (payload !== 0) return false;
-    } else {
+  let ts = Date.now();
+  let startTs = ts;
+  if (state.playbackControls.playbackState !== "NOT_PLAYING") {
+    if (payload !== 0) {
       startTs = ts - (payload * 1000);
+    };
+  } else {
+    setIdle();
+    return false
+  }
+
+  let vals = getValuesForActivity();
+  if (!vals) return false;
+
+  setActivity({
+    type: 2,
+    details: `Playing ${vals.title}`,
+    state: `by ${vals.artists}`,
+    smallImageKey: "tidal",
+    smallImageText: "Listening on TIDAL",
+    largeImageKey: vals.image,
+    largeImageText: vals.albumName,
+
+    timestamps: {
+      start: startTs,
+      end: ts + (vals.duration * 1000) - (payload * 1000),
     }
+  });
+}
 
-    let vals = getValuesForActivity();
-    if (!vals) return false;
+;(async ()=>{
+  await load();
 
-    setActivity({
-      type: 2,
-      details: `Playing ${vals.title}`,
-      state: `by ${vals.artists}`,
-      smallImageKey: "tidal",
-      smallImageText: "Listening on TIDAL",
-      largeImageKey: vals.image,
-      largeImageText: vals.albumName,
+  console.log("[DiscordRPC] Loaded!");
 
-      timestamps: {
-        start: startTs,
-        end: ts + (vals.duration * 1000) - (payload * 1000),
-      }
-    });
-  })
-  
+  let state = window.neptune.store.getState();
+
+  if (state.playbackControls.playbackState === "NOT_PLAYING"){
+    setIdle();
+  } else {
+    timeUpdateCallback([state.playbackControls.latestCurrentTime]);
+  }
+
+  intercept("playbackControls/TIME_UPDATE", timeUpdateCallback)
 })();
 
 export function onUnload() {

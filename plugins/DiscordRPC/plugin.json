@@ -1,6 +1,6 @@
 {
   "name": "Discord RPC",
-  "description": "woahhhh discord rpc!!! i love discord!!!",
+  "description": "adds discord rpc functionality to tidal",
   "author": "lolwm",
   "main": "./src/index.js"
 }

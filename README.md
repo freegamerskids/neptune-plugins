@@ -1,4 +1,11 @@
-# neptune plugin template
-This is a repository template for a neptune plugin monorepo.
+# my neptune plugin(s)
 
-Each plugin in the `plugins/` directory will be automatically built by running `pnpm run build` to their respective `dist/` folder.
+collection of plugins made by me for [neptune](https://github.com/uwu/neptune)
+
+## Discord RPC
+
+a simple plugin which adds discord rpc functionality to tidal
+
+download it by pasting this link into the plugins tab url box:
+
+`https://freegamerskids.github.io/neptune-plugins/DiscordRPC`

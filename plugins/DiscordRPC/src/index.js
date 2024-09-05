@@ -77,6 +77,8 @@ function timeUpdateCallback([payload]){
   });
 }
 
+let unloadTimeUpdateIntercept;
+
 ;(async ()=>{
   await load();
 
@@ -90,11 +92,12 @@ function timeUpdateCallback([payload]){
     timeUpdateCallback([state.playbackControls.latestCurrentTime]);
   }
 
-  intercept("playbackControls/TIME_UPDATE", timeUpdateCallback)
+  unloadTimeUpdateIntercept = intercept("playbackControls/TIME_UPDATE", timeUpdateCallback)
 })();
 
 export function onUnload() {
   unload();
+  unloadTimeUpdateIntercept();
 
   console.log("[DiscordRPC] Unloaded!");
 }
